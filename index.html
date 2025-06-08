@@ -296,35 +296,55 @@ irritatorNo.addEventListener("click", moveIrritatorNo);
   });
 </script>
   <script>
-  const irritatorYes = document.getElementById("irritatorYes");
-  const irritatorNo = document.getElementById("irritatorNo");
-  const finalVideo = document.getElementById("finalVideo");
+  function isOverlapping(rect1, rect2) {
+  return !(
+    rect1.right < rect2.left ||
+    rect1.left > rect2.right ||
+    rect1.bottom < rect2.top ||
+    rect1.top > rect2.bottom
+  );
+}
 
-  irritatorYes.addEventListener("click", () => {
-    finalVideo.style.display = "block";
-  });
+function moveIrritatorNo() {
+  const btn = irritatorNo;
+  const parent = btn.parentElement;
+  const yesBtn = irritatorYes;
 
-  function moveIrritatorNo() {
-    const btn = irritatorNo;
-    const parent = btn.parentElement;
+  const maxX = parent.offsetWidth - btn.offsetWidth;
+  const maxY = parent.offsetHeight - btn.offsetHeight;
 
-    const buffer = 60; // To prevent overlap with the Yes button
-    const maxX = parent.offsetWidth - btn.offsetWidth;
-    const maxY = parent.offsetHeight - btn.offsetHeight;
+  const yesRect = yesBtn.getBoundingClientRect();
+  const parentRect = parent.getBoundingClientRect();
 
-    let x, y;
-    do {
-      x = Math.random() * maxX;
-      y = Math.random() * maxY;
-    } while (
-      // Avoid overlapping Yes button (assumed to be top-left)
-      x < irritatorYes.offsetWidth + buffer &&
-      y < irritatorYes.offsetHeight + buffer
-    );
+  // Convert yesBtn position relative to parent container:
+  const yesRelativeRect = {
+    left: yesRect.left - parentRect.left,
+    right: yesRect.right - parentRect.left,
+    top: yesRect.top - parentRect.top,
+    bottom: yesRect.bottom - parentRect.top,
+  };
 
-    btn.style.left = `${x}px`;
-    btn.style.top = `${y}px`;
-  }
+  let x, y;
+  let tries = 0;
+
+  do {
+    x = Math.random() * maxX;
+    y = Math.random() * maxY;
+
+    const noRect = {
+      left: x,
+      right: x + btn.offsetWidth,
+      top: y,
+      bottom: y + btn.offsetHeight,
+    };
+
+    tries++;
+    if (tries > 100) break; // safety break to avoid infinite loops
+  } while (isOverlapping(noRect, yesRelativeRect));
+
+  btn.style.left = `${x}px`;
+  btn.style.top = `${y}px`;
+}
 
   irritatorNo.addEventListener("mouseover", moveIrritatorNo);
   irritatorNo.addEventListener("click", moveIrritatorNo);
