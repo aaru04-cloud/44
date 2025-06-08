@@ -226,7 +226,8 @@
         <div id="finalQuestion" style="margin-top: 1rem;">
   <p style="font-size: 1.4rem; font-weight: bold; margin-bottom: 1rem;">Will you let me be your forever irritator? 😝</p>
 <div style="display: flex; gap: 1rem; align-items: center; position: relative; height: 60px;">
-  <button id="irritatorYes" style="padding: 0.5rem 1rem; border-radius: 1rem; background: #8DB600; border: none; color: white; font-size: 1rem; cursor: pointer;">Yes</button>
+  <button id="irritatorYes" style="padding: 0.5rem 1rem; border-radius: 1rem; background: #D10068; border: none; color: white; font-size: 1rem; cursor: pointer;">Yes</button>
+  
   <button id="irritatorNo" style="padding: 0.5rem 1rem; border-radius: 1rem; background: #8DB600; border: none; color: white; font-size: 1rem; cursor: pointer; position: absolute;">No</button>
 </div>
 
@@ -294,5 +295,36 @@ irritatorNo.addEventListener("click", moveIrritatorNo);
 
   });
 </script>
+    <!-- all your main HTML content above -->
+
+  <script>
+    // Always make sure this runs after DOM is ready (bottom of body is usually fine)
+    const irritatorYes = document.getElementById("irritatorYes");
+    const irritatorNo = document.getElementById("irritatorNo");
+    const finalVideo = document.getElementById("finalVideo");
+
+    irritatorYes.addEventListener("click", () => {
+      finalVideo.style.display = "block";
+    });
+
+    function moveIrritatorNo() {
+      const btn = irritatorNo;
+      const parent = btn.parentElement;
+
+      const maxX = parent.offsetWidth - btn.offsetWidth;
+      const maxY = parent.offsetHeight - btn.offsetHeight;
+
+      const x = Math.random() * maxX;
+      const y = Math.random() * maxY;
+
+      btn.style.left = `${x}px`;
+      btn.style.top = `${y}px`;
+    }
+
+    irritatorNo.addEventListener("mouseover", moveIrritatorNo);
+    irritatorNo.addEventListener("click", moveIrritatorNo);
+  </script>
+
 </body>
 </html>
+
